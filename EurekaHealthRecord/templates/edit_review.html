@@ -1,0 +1,10 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Edit Review</h1>
+  <form method="post">
+    <label>Review</label>
+    <textarea name="review" required>{{ rev.review }}</textarea>
+    <br><button type="submit">Save</button>
+  </form>
+{% endblock %}

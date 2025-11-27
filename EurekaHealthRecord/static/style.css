@@ -1,0 +1,521 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, .ehr-hero__title {
+  font-family: 'Playfair Display', serif;
+}
+
+:root{
+  --navy:#082853;
+  --yellow:#ffd200;
+  --bg:#ffffff;
+  --muted:#f5f7fb;
+  --text:#092b56;
+  --ok:#e8f5e9;
+  --err:#ffebee;
+}
+* {
+  box-sizing: border-box;
+}
+.ehr-heart-icon {
+  height: 45px;        
+  width: auto;
+  margin-right: 8px;   
+  vertical-align: middle;
+  color: #ffd200;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Segoe UI, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+body {
+  background-image: url('/static/bg.svg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  background: var(--navy);
+  color: #fff;
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+
+  /*right side rounding */
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  overflow: hidden; /* keeps background inside the curve */
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: .5px;
+}
+
+.brand span {
+  color: var(--yellow);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.menu a:hover {
+  background: rgba(255, 255, 255, .12);
+}
+
+.content {
+  margin-left: 220px;
+  padding: 28px;
+  min-height: 100%;
+}
+
+h1 {
+  font-size: 36px;
+  margin: .2rem 0 1rem;
+}
+
+h2 {
+  font-size: 22px;
+  margin: 1rem 0 .5rem;
+}
+
+ul {
+  padding-left: 18px;
+}
+
+.flashwrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.flash {
+  padding: 10px 12px;
+  border-left: 6px solid;
+  border-radius: 8px;
+  background: var(--muted);
+}
+
+.flash.success {
+  background: var(--ok);
+  border-color: #2e7d32;
+}
+
+.flash.error {
+  background: var(--err);
+  border-color: #c62828;
+}
+
+label {
+  display: block;
+  margin: .4rem 0 .2rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px;
+  border: 1px solid #d8deea;
+  border-radius: 10px;
+}
+
+button {
+  background: var(--yellow);
+  color: #000;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(0.95);
+}
+
+/*  EurekaHR Home Hero */
+:root {
+  --ehr-navy: #042a58;         
+  --ehr-navy-dark: #04254b;
+}
+
+
+/* Full hero panel inside the main content area */
+.ehr-hero{
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(280px, 52%) 1fr; /* image | text */
+  min-height: 62vh;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--ehr-navy);       /* navy background */
+  color:white;
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  margin-top: 12px;
+  margin-bottom: 32px;                 /* spacing from top content */
+}
+
+/* left photo */
+.ehr-hero__image{
+  position: relative;
+  background-image: var(--hero-img);
+  background-size: cover;
+  background-position: center 35%;
+  isolation: isolate;
+}
+.ehr-hero__image::after{
+  content:"";
+  position:absolute; inset:0;
+  background: inherit;
+  background-image: var(--hero-img);
+  background-size: cover;
+  background-position: inherit;
+  /* ellipse curve */
+  -webkit-clip-path: ellipse(75% 85% at 100% 50%);
+          clip-path: ellipse(75% 85% at 100% 50%);
+  z-index:1;
+}
+/* Gradient overlay for better text contrast */
+.ehr-hero__image::before{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(0,0,0,.18), rgba(0,0,0,0));
+  z-index:2;
+}
+
+/* Right: text content area */
+.ehr-hero__text{
+  padding: 56px 56px 56px 40px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+
+
+.ehr-hero__title{
+  font-family: "Georgia", "Times New Roman", serif;   /* serif font for elegance */
+  font-size: clamp(32px, 4vw, 50px);
+  line-height: 1.05;
+  letter-spacing: .2px;
+  margin: 0 0 16px;
+  color:#ffd200;
+}
+
+/* Supporting line */
+.ehr-hero__subtitle{
+  font-size: clamp(16px, 2.1vw, 20px);
+  line-height: 1.6;
+  margin: 0 0 24px;
+  color:#f2f7ff;
+}
+
+/* Buttons styled for navy background */
+.ehr-hero__actions{ display:flex; gap:12px; }
+
+.ehr-btn{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:700;
+  text-decoration:none;
+  transition:transform .05s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.ehr-btn:active{ transform: translateY(1px); }
+
+.ehr-btn--light{
+  background:#fff;
+  color:var(--ehr-navy-dark);
+  border:2px solid #fff;
+}
+.ehr-btn--outline{
+  background:transparent;
+  color:#fff;
+  border:2px solid #fff;
+}
+.ehr-btn--light:hover{ filter:brightness(.96); }
+.ehr-btn--outline:hover{ background:rgba(255,255,255,.12); }
+
+/* Responsive adjustments */
+@media (max-width: 900px){
+  .ehr-hero{
+    grid-template-columns: 1fr;
+    min-height: 70vh;
+  }
+  .ehr-hero__image{
+    height: 32vh;
+  }
+  .ehr-hero__image::after{
+    -webkit-clip-path: ellipse(100% 55% at 50% 100%);
+            clip-path: ellipse(100% 55% at 50% 100%);
+  }
+  .ehr-hero__text{ padding: 28px; }
+}
+/* News section cards */
+
+body {
+  background-image: none;
+  background-color: #f5f7fb;
+}
+
+.ehr-hero {
+  margin-top: 24px;
+  margin-bottom: 40px;
+  padding: 40px 56px;
+  border-radius: 32px;
+  border: none;
+  box-shadow: 0 16px 32px rgba(0, 23, 71, 0.12);
+}
+
+.ehr-news {
+  margin-top: 32px;
+}
+
+.ehr-news__grid {
+  gap: 32px;
+}
+
+.news-card {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.news-card-inner {
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+
+
+
+/* Logs page styles */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;
+  margin-bottom:24px;
+}
+.stat-card{
+  background:rgba(255,255,255,0.96);
+  border-radius:18px;
+  padding:16px 18px;
+  box-shadow:0 10px 25px rgba(8,40,83,0.12);
+}
+.stat-card h3{
+  margin:0 0 8px;
+  font-size:14px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--navy);
+}
+.stat-number{
+  font-size:28px;
+  font-weight:800;
+  color:var(--navy);
+}
+.search-form{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  margin-bottom:12px;
+}
+.search-form input[type="text"]{
+  max-width:260px;
+}
+.logs-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:16px;
+}
+.logs-table th,
+.logs-table td{
+  border:1px solid #d8deea;
+  padding:8px 10px;
+  font-size:14px;
+}
+.logs-table th{
+  background:#f5f7fb;
+  text-align:left;
+}
+@media (max-width:768px){
+  .search-form{
+    flex-direction:column;
+    align-items:stretch;
+  }
+}
+
+
+
+/*Top navigation bar */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+}
+
+.topbar-logo {
+  font-weight: 800;
+  font-size: 25px;
+  letter-spacing: .4px;
+  color: var(--navy);
+}
+
+.topbar-logo span {
+  color:#ffd200;
+}
+
+.topbar-nav {
+  display: flex;
+  gap: 20px;
+  font-size: 16px;
+}
+
+.topbar-nav a {
+  text-decoration: none;
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background .2s ease, color .2s ease, transform .1s ease;
+}
+
+.topbar-nav a:hover {
+  background: var(--navy);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Adjustments for fixed topbar */
+.sidebar {
+  top: 60px;
+}
+
+.content {
+  margin-top: 70px;
+}
+
+/* small footer label inside sidebar */
+.sidebar-footer {
+  margin-top: auto;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* space between footer and main*/
+body {
+  padding-bottom: 54px;
+}
+
+/*Flipping cards */
+.ehr-news {
+  margin-top: 32px;
+}
+
+.ehr-news__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* flip-style cards */
+.news-card {
+  perspective: 1000px;
+}
+
+.news-card-inner {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  transition: transform .6s;
+  transform-style: preserve-3d;
+}
+
+.news-card:hover .news-card-inner {
+  transform: rotateY(180deg);
+}
+
+.news-card-front,
+.news-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 16px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.news-card-front h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: bolder;
+  color:#ffd200
+
+  
+}
+
+.news-card-front p {
+  margin: 0;
+  font-size: 14px;
+  color
+}
+
+.news-card-back {
+  transform: rotateY(180deg);
+  font-size: 14px;
+  color:#022873;
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 14px;
+  }
+  .site-footer {
+    left: 0;
+  }
+  .content {
+    margin-left: 0;
+  }
+}

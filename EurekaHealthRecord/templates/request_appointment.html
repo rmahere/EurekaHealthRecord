@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Request an appointment</h1>
+  <p>Doctor: {{ patient.doctor.email }}</p>
+  <form method="post">
+    <label>Date</label>
+    <input type="date" name="date" required>
+    <label>Time</label>
+    <input type="time" name="time" required>
+    <label>Reason</label>
+    <textarea name="reason" required></textarea>
+    <br><button type="submit">Send request</button>
+  </form>
+{% endblock %}

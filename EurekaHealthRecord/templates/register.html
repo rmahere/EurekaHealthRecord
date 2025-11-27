@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Register</h1>
+  <form method="post" novalidate>
+    <label>Email</label>
+    <input type="email" name="email" required>
+    <label>Password</label>
+    <input type="password" name="password" required>
+    <label>Role</label>
+    <select name="role">
+      <option value="patient">Patient</option>
+      <option value="doctor">Doctor</option>
+    </select>
+    <label>Patient Name (Patient only)</label>
+    <input type="text" name="name" placeholder="Full name">
+    <br><button type="submit">Create account</button>
+  </form>
+{% endblock %}

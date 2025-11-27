@@ -1,0 +1,84 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Patient Dashboard</h1>
+
+  <!-- Iteration N: simple personal stats -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      <h3>Appointments</h3>
+      <p class="stat-number">{{ stats.appointments }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Medications</h3>
+      <p class="stat-number">{{ stats.medications }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Reviews</h3>
+      <p class="stat-number">{{ stats.reviews }}</p>
+    </div>
+  </section>
+
+  {% if reminders %}
+    <section>
+      <h2>Upcoming appointment reminders</h2>
+      <ul>
+        {% for r in reminders %}
+          <li>{{ r }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  <section>
+    <h2>My profile</h2>
+    <p><strong>Name:</strong> {{ patient.name }}</p>
+    {% if patient.phone %}<p><strong>Phone:</strong> {{ patient.phone }}</p>{% endif %}
+    {% if patient.address %}<p><strong>Address:</strong> {{ patient.address }}</p>{% endif %}
+    {% if patient.allergies %}<p><strong>Allergies:</strong> {{ patient.allergies }}</p>{% endif %}
+    <p><a href="{{ url_for('patient_profile') }}"><button type="button">Update profile</button></a></p>
+  </section>
+
+  <section>
+    <h2>My appointments</h2>
+    <ul>
+      {% for a in appointments %}
+        <li>
+          {{ a.date }} {% if a.time %}at {{ a.time }}{% endif %}
+          – Status: {{ a.status }}
+          {% if a.reason %}<br>Reason: {{ a.reason }}{% endif %}
+          {% if a.files %}
+            <br>Records:
+            {% for f in a.files %}
+              <a href="{{ url_for('download_record', file_id=f.id) }}">{{ f.original_name }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          {% endif %}
+        </li>
+      {% else %}
+        <li>No appointments yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>My medications</h2>
+    <ul>
+      {% for m in medications %}
+        <li>{{ m.medication }}</li>
+      {% else %}
+        <li>No medications yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>My visit reviews</h2>
+    <ul>
+      {% for r in reviews %}
+        <li>{{ r.review }}</li>
+      {% else %}
+        <li>No reviews yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Add Visit (appointment + review)</h1>
+  <form method="post">
+    <label>Patient</label>
+    <select name="patient_id" required>
+      {% for p in patients %}
+        <option value="{{ p.id }}">{{ p.name }}</option>
+      {% endfor %}
+    </select>
+    <label>Date</label>
+    <input type="date" name="date" required>
+    <label>Notes (saved as review)</label>
+    <textarea name="notes" required></textarea>
+    <br><button type="submit">Save</button>
+  </form>
+{% endblock %}

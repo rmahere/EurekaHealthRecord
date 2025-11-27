@@ -1,0 +1,64 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eureka Health Record</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+      <div class="topbar-logo">
+    <img src="{{ url_for('static', filename='logo-heart.png') }}" 
+         class="ehr-heart-icon" 
+         alt="icon">
+    Eureka<span>HR</span>
+</div>
+    <nav class="topbar-nav">
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('about') }}">About </a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+  </header>
+
+  <aside class="sidebar">
+    <div class="brand">&nbsp;</div>
+    <nav class="menu">
+      <a href="{{ url_for('index') }}">Home</a>
+      {% if user %}
+        {% if user.role == 'doctor' %}
+          <a href="{{ url_for('doctor_dashboard') }}">Doctor dashboard</a>
+          <a href="{{ url_for('add_patient') }}">Add patient</a>
+          <a href="{{ url_for('add_visit') }}">Add visit</a>
+          <a href="{{ url_for('add_medication') }}">Add medication</a>
+        {% elif user.role == 'patient' %}
+          <a href="{{ url_for('patient_dashboard') }}">Patient dashboard</a>
+          <a href="{{ url_for('request_appointment') }}">Request appointment</a>
+        {% endif %}
+        <a href="{{ url_for('notifications') }}">Notifications</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-footer">Eureka @  2025</div>
+  </aside>
+
+  <main class="content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashwrap">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+
+</html>

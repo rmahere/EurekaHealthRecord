@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Add Medication</h1>
+  <form method="post">
+    <label>Patient</label>
+    <select name="patient_id" required>
+      {% for p in patients %}
+        <option value="{{ p.id }}">{{ p.name }}</option>
+      {% endfor %}
+    </select>
+    <label>Medication</label>
+    <input name="medication" required>
+    <br><button type="submit">Save</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,75 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Manage: {{ patient.name }}</h1>
+
+  <section>
+    <h2>Profile</h2>
+    {% if patient.phone %}<p><strong>Phone:</strong> {{ patient.phone }}</p>{% endif %}
+    {% if patient.address %}<p><strong>Address:</strong> {{ patient.address }}</p>{% endif %}
+    {% if patient.allergies %}<p><strong>Allergies:</strong> {{ patient.allergies }}</p>{% endif %}
+  </section>
+
+  <p>
+    <a href="{{ url_for('edit_patient', pid=patient.id) }}"><button>Edit Patient</button></a>
+    {% if not patient.doctor_id %}
+      <form method="post" action="{{ url_for('assign_patient', pid=patient.id) }}" style="display:inline">
+        <button type="submit">Assign to me</button>
+      </form>
+    {% endif %}
+  </p>
+
+  <h2>Appointments</h2>
+  <ul>
+    {% for a in appointments %}
+      <li>
+        {{ a.date }} {% if a.time %}at {{ a.time }}{% endif %}
+        – Status: {{ a.status }}
+        {% if a.reason %}<br>Reason: {{ a.reason }}{% endif %}
+        <a href="{{ url_for('edit_appointment', aid=a.id) }}">Edit</a>
+        <form action="{{ url_for('delete_appointment', aid=a.id) }}" method="post" style="display:inline" onsubmit="return confirm('Delete this appointment?')">
+          <button type="submit">Delete</button>
+        </form>
+        <a href="{{ url_for('upload_record', aid=a.id) }}">Upload record</a>
+        {% if a.files %}
+          <br>Records:
+          {% for f in a.files %}
+            <a href="{{ url_for('download_record', file_id=f.id) }}">{{ f.original_name }}</a>{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+      </li>
+    {% else %}
+      <li>No appointments yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Medications</h2>
+  <ul>
+    {% for m in medications %}
+      <li>
+        {{ m.medication }}
+        <a href="{{ url_for('edit_medication', mid=m.id) }}">Edit</a>
+        <form action="{{ url_for('delete_medication', mid=m.id) }}" method="post" style="display:inline" onsubmit="return confirm('Delete this medication?')">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    {% else %}
+      <li>No medications yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Reviews</h2>
+  <ul>
+    {% for r in reviews %}
+      <li>
+        {{ r.review }}
+        <a href="{{ url_for('edit_review', rid=r.id) }}">Edit</a>
+        <form action="{{ url_for('delete_review', rid=r.id) }}" method="post" style="display:inline" onsubmit="return confirm('Delete this review?')">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    {% else %}
+      <li>No reviews yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

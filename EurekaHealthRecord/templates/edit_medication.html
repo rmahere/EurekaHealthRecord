@@ -1,0 +1,10 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Edit Medication</h1>
+  <form method="post">
+    <label>Medication</label>
+    <input name="medication" value="{{ med.medication }}" required>
+    <br><button type="submit">Save</button>
+  </form>
+{% endblock %}

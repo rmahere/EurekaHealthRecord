@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Hero panel -->
+<section class="ehr-hero">
+  <!-- Left curved image -->
+  <div class="ehr-hero__image" style="--hero-img:url('{{ url_for('static', filename='hero.jpg') }}');"></div>
+
+  <!-- Right text -->
+  <div class="ehr-hero__text">
+    <h1 class="ehr-hero__title">
+      Welcome to<br>Eureka Health Record
+    </h1>
+    <p class="ehr-hero__subtitle">
+      Manage visits and track medications securely in one place.
+    </p>
+  </div>
+</section>
+
+<!-- Flipping info cards (Why Eureka / Get more info / Solutions) -->
+<section class="ehr-news">
+  <div class="ehr-news__grid">
+    <!-- WHY EUREKA -->
+    <article class="news-card">
+      <div class="news-card-inner">
+        <div class="news-card-front">
+          <h3>Why Eureka</h3>
+          <p>A lightweight EHR prototype for small clinics and focused teams.</p>
+        </div>
+        <div class="news-card-back">
+          <p><strong>Built for real visits</strong><br>
+             Capture patients, visits, and medications in a way that matches how clinics actually work.</p>
+          <p><strong>Clear for everyone</strong><br>
+             Simple screens for doctors and patients so no one gets lost in the system.</p>
+          <p><strong>Designed for privacy</strong><br>
+             Data stays inside your clinic project, with role-based access for doctors and patients.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- GET MORE INFO -->
+    <article class="news-card">
+      <div class="news-card-inner">
+        <div class="news-card-front">
+          <h3>Get more info</h3>
+          <p>See the right details before and after every visit.</p>
+        </div>
+        <div class="news-card-back">
+          <p><strong>Visit snapshot</strong><br>
+             Doctors can quickly review past visit notes while preparing for today&apos;s appointment.</p>
+          <p><strong>Medication overview</strong><br>
+             Track what the patient is currently taking and what was prescribed before.</p>
+          <p><strong>Appointment status</strong><br>
+             Follow requests as they move from Pending to Approved or Rejected so everyone knows what is happening.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- SOLUTIONS -->
+    <article class="news-card">
+      <div class="news-card-inner">
+        <div class="news-card-front">
+          <h3>Solutions</h3>
+          <p>Support patients, providers, and developers together.</p>
+        </div>
+        <div class="news-card-back">
+          <p><strong>For patients</strong><br>
+             Easy login to view visits, medications, and appointment decisions in one place.</p>
+          <p><strong>For providers</strong><br>
+             Central dashboard to manage patients, record visits, add medications, and respond to appointment requests.</p>
+          <p><strong>For developers</strong><br>
+             Clean Flask,Python and SQLite structure that can be extended with new modules, APIs, or analytics as the project grows.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+{% endblock %}

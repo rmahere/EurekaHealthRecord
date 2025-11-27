@@ -1,0 +1,12 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Notifications</h1>
+  <ul>
+    {% for n in notifications %}
+      <li>{{ n.created_at.strftime('%Y-%m-%d %H:%M') }} – {{ n.message }}</li>
+    {% else %}
+      <li>No notifications yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

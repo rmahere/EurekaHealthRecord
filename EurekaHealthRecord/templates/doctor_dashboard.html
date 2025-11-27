@@ -1,0 +1,87 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Doctor Dashboard</h1>
+
+  <!-- Iteration N: summary cards -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      <h3>My patients</h3>
+      <p class="stat-number">{{ stats.patients }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Appointments</h3>
+      <p class="stat-number">{{ stats.appointments }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Pending requests</h3>
+      <p class="stat-number">{{ stats.pending }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Medications</h3>
+      <p class="stat-number">{{ stats.medications }}</p>
+    </div>
+  </section>
+
+  {% if reminders %}
+    <section>
+      <h2>Upcoming appointment reminders</h2>
+      <ul>
+        {% for r in reminders %}
+          <li>{{ r }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  <section>
+    <h2>My patients</h2>
+
+    <!-- Iteration L: search/filter -->
+    <form method="get" class="search-form">
+      <input type="text" name="q" placeholder="Search patient by name" value="{{ search or '' }}">
+      <button type="submit">Search</button>
+      <a href="{{ url_for('doctor_export', kind='appointments') }}"><button type="button">Export appointments</button></a>
+      <a href="{{ url_for('doctor_export', kind='medications') }}"><button type="button">Export meds</button></a>
+      <a href="{{ url_for('admin_logs') }}"><button type="button">Activity logs</button></a>
+    </form>
+
+    <ul>
+      {% for p in patients %}
+        <li>
+          #{{ p.id }} - {{ p.name }}
+          {% if p.phone %} ({{ p.phone }}){% endif %}
+          | <a href="{{ url_for('manage_patient', pid=p.id) }}">Manage</a>
+          | <a href="{{ url_for('edit_patient', pid=p.id) }}">Edit</a>
+          <form action="{{ url_for('delete_patient', pid=p.id) }}" method="post" style="display:inline" onsubmit="return confirm('Delete this patient and all related records?')">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      {% else %}
+        <li>No patients yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>Pending appointment requests</h2>
+    <ul>
+      {% for a in pending_appts %}
+        <li>
+          Patient #{{ a.patient_id }} on {{ a.date }} {% if a.time %}at {{ a.time }}{% endif %}
+          – Status: {{ a.status }}
+          {% if a.reason %}<br>Reason: {{ a.reason }}{% endif %}
+          <form action="{{ url_for('approve_appointment', aid=a.id) }}" method="post" style="display:inline">
+            <button type="submit">Approve</button>
+          </form>
+          <form action="{{ url_for('reject_appointment', aid=a.id) }}" method="post" style="display:inline">
+            <button type="submit">Reject</button>
+          </form>
+          <a href="{{ url_for('edit_appointment', aid=a.id) }}">Edit</a>
+        </li>
+      {% else %}
+        <li>No pending requests.</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

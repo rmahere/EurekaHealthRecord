@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <h1>My Profile</h1>
+
+  <form method="post">
+    <label for="phone">Phone</label>
+    <input type="text" name="phone" id="phone" value="{{ patient.phone or '' }}">
+
+    <label for="address">Address</label>
+    <textarea name="address" id="address">{{ patient.address or '' }}</textarea>
+
+    <label for="allergies">Allergies</label>
+    <textarea name="allergies" id="allergies">{{ patient.allergies or '' }}</textarea>
+
+    <br><button type="submit">Save profile</button>
+  </form>
+{% endblock %}
