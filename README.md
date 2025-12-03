@@ -43,7 +43,10 @@ pip install -r requirements.txt
 # 3. Initialize database (if your project has this file)
 python init_db.py
 
-# 4. Run the app
+# 4. python -m pytest
+
+
+# 5. Run the app
 flask run
 # or
 python app.py
