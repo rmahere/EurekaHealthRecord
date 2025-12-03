@@ -221,7 +221,7 @@ button:hover {
 
 
 .ehr-hero__title{
-  font-family: "Georgia", "Times New Roman", serif;   /* serif font for elegance */
+  font-family: "Georgia", "Times New Roman", serif;  
   font-size: clamp(32px, 4vw, 50px);
   line-height: 1.05;
   letter-spacing: .2px;
@@ -237,7 +237,6 @@ button:hover {
   color:#f2f7ff;
 }
 
-/* Buttons styled for navy background */
 .ehr-hero__actions{ display:flex; gap:12px; }
 
 .ehr-btn{
@@ -423,8 +422,7 @@ body {
   color: #fff;
   transform: translateY(-1px);
 }
-
-/* Adjustments for fixed topbar */
+/* Adjustments for sidebar and content due to topbar */
 .sidebar {
   top: 60px;
 }
@@ -456,7 +454,7 @@ body {
   gap: 18px;
 }
 
-/* flip-style cards */
+/* flipping cards cards */
 .news-card {
   perspective: 1000px;
 }
@@ -499,7 +497,7 @@ body {
 .news-card-front p {
   margin: 0;
   font-size: 14px;
-  color
+  color:#022873;
 }
 
 .news-card-back {

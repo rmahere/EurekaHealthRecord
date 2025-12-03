@@ -10,7 +10,7 @@ import os
 
 app = Flask(__name__)
 
-# ---------- Database configuration ----------
+#Database configuration
 ABS_DB_PATH = Path(app.root_path, "instance", "database.db").resolve()
 os.makedirs(ABS_DB_PATH.parent, exist_ok=True)
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{ABS_DB_PATH.as_posix()}"
@@ -24,7 +24,7 @@ app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB upload limit
 
 db = SQLAlchemy(app)
 
-# ---------- Models ----------
+# Model definitions
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,14 +52,14 @@ class Patient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
 
-    # Login link (optional – a patient may exist before they register)
+    # Login link
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), unique=True, nullable=True)
 
     # Owning doctor
     doctor_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     doctor = db.relationship("User", foreign_keys=[doctor_id])
 
-    # Iteration K – extended profile information
+
     phone = db.Column(db.String(50), nullable=True)
     address = db.Column(db.String(255), nullable=True)
     allergies = db.Column(db.String(255), nullable=True)
@@ -71,12 +71,12 @@ class Appointment(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey("patient.id"), nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
 
-    # Date and time are kept as simple strings from the form to stay beginner‑friendly
+    # Date and time of the appointment
     date = db.Column(db.String(20), nullable=False)
     time = db.Column(db.String(10), nullable=True)
     reason = db.Column(db.String(255), nullable=True)
 
-    # Iteration I: status of the appointment request
+    #status of the appointment
     status = db.Column(db.String(20), nullable=False, default="Pending")  # Pending / Approved / Rejected
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -106,7 +106,6 @@ class Review(db.Model):
 
 
 class ActivityLog(db.Model):
-    """Iteration R – simple audit trail of key actions."""
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     action = db.Column(db.String(80), nullable=False)
@@ -117,7 +116,6 @@ class ActivityLog(db.Model):
 
 
 class MedicalFile(db.Model):
-    """Iteration S – uploaded medical records per appointment."""
     id = db.Column(db.Integer, primary_key=True)
     appointment_id = db.Column(db.Integer, db.ForeignKey("appointment.id"), nullable=False)
     stored_name = db.Column(db.String(255), nullable=False)
@@ -137,7 +135,7 @@ class Notification(db.Model):
     user = db.relationship("User", backref="notifications")
 
 
-# ---------- Helper functions / decorators ----------
+# Authentication and user session management
 
 def current_user():
     uid = session.get("user_id")
@@ -195,7 +193,7 @@ def log_activity(action: str, details: str = "") -> None:
         db.session.add(entry)
         db.session.commit()
     except Exception:
-        # Logging must never break the main flow.
+        # Fail silently to avoid breaking user flow
         db.session.rollback()
 def create_notification(user_id: int, message: str) -> None:
     note = Notification(user_id=user_id, message=message)
@@ -227,7 +225,7 @@ def get_upcoming_appointment_reminders(user: User):
     return reminders
 
 
-# ---------- Auth routes ----------
+#Route definitions
 
 @app.route("/")
 def index():
@@ -312,7 +310,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-# ---------- Doctor views ----------
+#Doctor routes
 
 
 @app.route("/doctor")
@@ -320,21 +318,20 @@ def logout():
 def doctor_dashboard():
     user = current_user()
 
-    # Iteration L – simple search/filter by patient name
+        # Patient list with optional search
     search = request.args.get("q", "").strip()
     query = Patient.query.filter_by(doctor_id=user.id)
     if search:
         query = query.filter(Patient.name.ilike(f"%{search}%"))
     patients = query.order_by(Patient.name.asc()).all()
-
-    # Pending appointment requests for Iteration I / M
+        # Pending appointments
     pending_appts = (
         Appointment.query.filter_by(doctor_id=user.id, status="Pending")
         .order_by(Appointment.created_at.desc())
         .all()
     )
 
-    # Iteration N – dashboard analytics
+    # Simple stats for the dashboard
     total_patients = Patient.query.filter_by(doctor_id=user.id).count()
     total_appointments = Appointment.query.filter_by(doctor_id=user.id).count()
     total_medications = (
@@ -374,7 +371,7 @@ def add_patient():
             flash("Patient must register first with that email.", "error")
             return render_template("add_patient.html", user=user)
 
-        # If there is already a Patient row for this user, reuse it
+        # Check if a Patient already exists for this user
         patient = Patient.query.filter_by(user_id=linked_user.id).first()
         if patient:
             if patient.doctor_id and patient.doctor_id != user.id:
@@ -420,7 +417,7 @@ def add_visit():
         if patient.doctor_id != user.id:
             abort(403)
 
-        # Appointment + review together (existing behaviour)
+        # Create appointment and review records
         appt = Appointment(
             patient_id=patient_id,
             doctor_id=user.id,
@@ -509,7 +506,7 @@ def delete_patient(pid):
     patient = Patient.query.get_or_404(pid)
     if patient.doctor_id != user.id:
         abort(403)
-    # Cascade delete simple: delete appointments, meds, reviews, then patient
+    # Delete related records
     Appointment.query.filter_by(patient_id=patient.id).delete()
     Medication.query.filter_by(patient_id=patient.id).delete()
     Review.query.filter_by(patient_id=patient.id).delete()
@@ -519,7 +516,7 @@ def delete_patient(pid):
     return redirect(url_for("doctor_dashboard"))
 
 
-# ---------- Appointment management (Iteration I) ----------
+#Appointment management
 
 @app.route("/doctor/appointment/<int:aid>/edit", methods=["GET", "POST"])
 @doctor_required
@@ -614,7 +611,7 @@ def reject_appointment(aid):
     return redirect(request.referrer or url_for("doctor_dashboard"))
 
 
-# ---------- Medication & review ----------
+#medication management
 
 @app.route("/add_medication", methods=["GET", "POST"])
 @doctor_required
@@ -728,7 +725,7 @@ def delete_review(rid):
     return redirect(url_for("manage_patient", pid=pid))
 
 
-# ---------- Patient views / Iteration I request flow ----------
+#Patient routes
 
 
 @app.route("/patient")
@@ -756,7 +753,7 @@ def patient_dashboard():
         .all()
     )
 
-    # Iteration N – simple stats for the patient
+    # Simple stats for the dashboard
     stats = {
         "appointments": len(appts),
         "medications": len(meds),
@@ -807,7 +804,7 @@ def request_appointment():
         db.session.commit()
         log_activity("request_appointment", f"Patient {patient.id} requested appointment on {date_value}")
 
-        # Notify doctor that a new request has arrived
+        # Notify doctor about the new appointment request
         create_notification(
             patient.doctor_id,
             f"New appointment request from {patient.name} on {date_value} at {time_value}.",
@@ -819,7 +816,7 @@ def request_appointment():
     return render_template("request_appointment.html", user=user, patient=patient)
 
 
-# ---------- Notifications (Iteration J) ----------
+#Notifications
 
 @app.route("/notifications")
 @login_required
@@ -831,7 +828,7 @@ def notifications():
 
 
 
-# ---------- Patient profile (Iteration K) ----------
+#Patient profile management
 
 @app.route("/patient/profile", methods=["GET", "POST"])
 @patient_required
@@ -854,8 +851,7 @@ def patient_profile():
     return render_template("patient_profile.html", user=user, patient=patient)
 
 
-# ---------- Export / reporting (Iteration O) ----------
-
+#data export
 import csv
 from io import StringIO
 from flask import Response
@@ -893,7 +889,7 @@ def doctor_export():
     )
 
 
-# ---------- Password reset (Iteration P) ----------
+#Password reset
 
 @app.route("/forgot_password", methods=["GET", "POST"])
 def forgot_password():
@@ -924,7 +920,7 @@ def forgot_password():
     return render_template("forgot_password.html", user=current_user())
 
 
-# ---------- File upload for medical records (Iteration S) ----------
+# File upload and download
 
 ALLOWED_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "doc", "docx"}
 
@@ -978,7 +974,7 @@ def download_record(file_id):
     patient = appt.patient
     user = current_user()
 
-    # Check access: doctor for this patient, or the patient themselves
+    #check access permissions
     allowed = False
     if user.role == "doctor" and patient.doctor_id == user.id:
         allowed = True
@@ -992,7 +988,7 @@ def download_record(file_id):
     return send_from_directory(path, mf.stored_name, as_attachment=True, download_name=mf.original_name)
 
 
-# ---------- Activity log viewer (Iteration R) ----------
+#Activity logs (admin only)
 
 @app.route("/admin/logs")
 @doctor_required
@@ -1000,7 +996,7 @@ def admin_logs():
     logs = ActivityLog.query.order_by(ActivityLog.created_at.desc()).limit(200).all()
     return render_template("admin_logs.html", user=current_user(), logs=logs)
 
-# ---------- Simple database initialisation ----------
+#database initialization
 
 def init_db_with_seed():
     """Create tables and add one demo doctor + patient if database is empty."""
@@ -1035,13 +1031,12 @@ def init_db_with_seed():
 
 
 with app.app_context():
-    # For this student demo we always recreate a fresh database
-    # so that the schema matches the models and we avoid migration errors.
+    #fresh start 
     if ABS_DB_PATH.exists():
         try:
             ABS_DB_PATH.unlink()
         except Exception:
-            # If the file is locked for some reason we continue;
+            # Unable to delete the old database file.
             # SQLite will still open it if possible.
             pass
     db.create_all()
@@ -1049,5 +1044,4 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    # For local testing
     app.run(debug=True)
